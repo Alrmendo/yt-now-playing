@@ -28,6 +28,4 @@ export interface WidgetSettings {
   themeId: string;
   showProgress: boolean;
   showTimeLabels: boolean;
-  alwaysOnTopSimulated: boolean; // widget status display decoration
-  useMockInteractivity: boolean; // allow users to play/pause and scrub within the widget
 }

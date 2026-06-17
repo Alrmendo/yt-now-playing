@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { Play, Pause, Disc, Youtube } from "lucide-react";
+import { Disc, Youtube } from "lucide-react";
 import { NowPlaying, ThemePreset, WidgetSettings } from "../types";
 import { getThemeClasses } from "../mockData";
 
@@ -12,20 +12,10 @@ interface CompactPlayerProps {
   data: NowPlaying;
   theme: ThemePreset;
   settings: WidgetSettings;
-  onTogglePlay?: () => void;
-  onSeek?: (value: number) => void;
 }
 
-export default function CompactPlayer({
-  data,
-  theme,
-  settings,
-  onTogglePlay,
-  onSeek,
-}: CompactPlayerProps) {
+export default function CompactPlayer({ data, theme, settings }: CompactPlayerProps) {
   const t = getThemeClasses(theme.accent);
-  
-  // Calculate percentage
   const progressPercent = data.duration > 0 ? (data.currentTime / data.duration) * 100 : 0;
 
   return (
@@ -37,7 +27,7 @@ export default function CompactPlayer({
       <div className={`absolute top-0 right-0 w-24 h-24 rounded-full filter blur-2xl opacity-15 transition-colors ${t.bg}`} />
 
       <div className="p-3.5 flex items-center space-x-3">
-        {/* Thumbnail representation */}
+        {/* Thumbnail */}
         <div className="relative flex-shrink-0">
           <img
             id="compact-thumb"
@@ -46,8 +36,6 @@ export default function CompactPlayer({
             className="w-12 h-12 object-cover rounded-lg border border-slate-800 shadow-sm"
             referrerPolicy="no-referrer"
           />
-
-          {/* Real-time Spinning Vinyl decoration on playback */}
           {data.isPlaying && (
             <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border border-slate-900 flex items-center justify-center p-0.5 animate-spin shadow-md ${t.bg}`}>
               <Disc className="w-3 h-3 text-white" />
@@ -56,50 +44,27 @@ export default function CompactPlayer({
         </div>
 
         {/* Info */}
-        <div className="flex-1 min-w-0 pr-1">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-1 mb-0.5">
             <Youtube className="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
             <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">YouTube</span>
           </div>
-
-          <h3 
+          <h3
             id="compact-title"
             className="text-xs font-bold text-slate-100 truncate tracking-tight leading-snug hover:text-white transition-colors"
             title={data.title}
           >
             {data.title}
           </h3>
-
-          <p 
-            id="compact-channel"
-            className="text-[11px] text-slate-400 truncate mt-0.5"
-          >
+          <p id="compact-channel" className="text-[11px] text-slate-400 truncate mt-0.5">
             {data.channel}
           </p>
         </div>
-
-        {/* Simulated Quick Control Layer */}
-        {settings.useMockInteractivity && (
-          <button
-            id="compact-play-btn"
-            onClick={onTogglePlay}
-            className={`flex-shrink-0 p-2 rounded-full border transition-all ${t.bgLight} ${t.border} ${t.text} hover:bg-opacity-20 active:scale-90`}
-            aria-label={data.isPlaying ? "Pause" : "Play"}
-          >
-            {data.isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
-          </button>
-        )}
       </div>
 
-      {/* Progress Bar Line */}
+      {/* Progress Bar */}
       {settings.showProgress && (
-        <div className="relative w-full h-1 bg-slate-950/40 cursor-pointer" onClick={(e) => {
-          if (!onSeek) return;
-          const rect = e.currentTarget.getBoundingClientRect();
-          const clickX = e.clientX - rect.left;
-          const ratio = Math.max(0, Math.min(1, clickX / rect.width));
-          onSeek(ratio * data.duration);
-        }}>
+        <div className="relative w-full h-1 bg-slate-950/40">
           <div
             id="compact-progress-indicator"
             className={`absolute top-0 left-0 h-full transition-all duration-300 ${t.bg}`}

@@ -4,20 +4,15 @@
  */
 
 import React from "react";
-import { 
-  X, 
-  Layout, 
-  Palette, 
-  Eye, 
-  EyeOff, 
-  Tv, 
-  Sliders, 
-  Check, 
-  Layers, 
-  Zap,
-  MousePointerClick
+import {
+  X,
+  Layout,
+  Palette,
+  Eye,
+  Sliders,
+  Check,
 } from "lucide-react";
-import { LayoutPreset, ThemePreset, WidgetSettings } from "../types";
+import { LayoutPreset, WidgetSettings } from "../types";
 import { THEME_PRESETS, getThemeClasses } from "../mockData";
 
 interface SettingsPanelProps {
@@ -48,7 +43,7 @@ export default function SettingsPanel({
     {
       id: "full",
       label: "Full Display Card",
-      desc: "Detailed information & tactile media controller",
+      desc: "Detailed information & media display",
       icon: "⏹",
     },
     {
@@ -60,7 +55,7 @@ export default function SettingsPanel({
   ];
 
   return (
-    <div 
+    <div
       id="settings-overlay-backdrop"
       className="fixed inset-0 bg-slate-950/75 z-50 flex justify-end animate-fade-in backdrop-blur-sm"
       onClick={onClose}
@@ -94,7 +89,7 @@ export default function SettingsPanel({
               <Layout className="w-3.5 h-3.5" />
               <span>Layout Preset</span>
             </h3>
-            
+
             <div className="grid grid-cols-1 gap-2.5">
               {layouts.map((lay) => {
                 const isActive = settings.layout === lay.id;
@@ -104,8 +99,8 @@ export default function SettingsPanel({
                     key={lay.id}
                     onClick={() => onUpdateSettings({ layout: lay.id })}
                     className={`flex items-start text-left p-3 rounded-xl border transition-all duration-200 ${
-                      isActive 
-                        ? `${t.border} ${t.bgLight} bg-opacity-40` 
+                      isActive
+                        ? `${t.border} ${t.bgLight} bg-opacity-40`
                         : "border-slate-800 bg-slate-850/40 hover:border-slate-700 hover:bg-slate-800/40"
                     }`}
                   >
@@ -145,14 +140,14 @@ export default function SettingsPanel({
                     key={them.id}
                     onClick={() => onUpdateSettings({ themeId: them.id })}
                     className={`relative aspect-square rounded-xl border flex flex-col items-center justify-center transition-all ${
-                      isSelected 
-                        ? "border-white bg-slate-800 scale-105 shadow-md" 
+                      isSelected
+                        ? "border-white bg-slate-800 scale-105 shadow-md"
                         : "border-slate-800 bg-slate-850 hover:border-slate-700"
                     }`}
                     title={them.name}
                   >
-                    <span 
-                      className="w-5 h-5 rounded-full shadow-inner border border-white/10" 
+                    <span
+                      className="w-5 h-5 rounded-full shadow-inner border border-white/10"
                       style={{ backgroundColor: them.colorHex }}
                     />
                     <span className="text-[8px] text-slate-400 mt-1.5 truncate max-w-full px-1">
@@ -216,38 +211,18 @@ export default function SettingsPanel({
                   }`} />
                 </button>
               </div>
-
-              {/* Interactivity Toggle */}
-              <div className="flex items-center justify-between py-1.5 border-t border-slate-800/60">
-                <div>
-                  <label htmlFor="settings-interactivity-toggle" className="text-xs font-semibold text-slate-200">Enforce Interactivity</label>
-                  <p className="text-[10px] text-slate-400">Allows clicking play/pause inside widget</p>
-                </div>
-                <button
-                  id="settings-interactivity-toggle"
-                  onClick={() => onUpdateSettings({ useMockInteractivity: !settings.useMockInteractivity })}
-                  className={`w-9 h-5 rounded-full p-0.5 transition-colors focus:outline-none ${
-                    settings.useMockInteractivity ? t.bg : "bg-slate-700"
-                  }`}
-                  aria-pressed={settings.useMockInteractivity}
-                >
-                  <div className={`w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform ${
-                    settings.useMockInteractivity ? "translate-x-4" : "translate-x-0"
-                  }`} />
-                </button>
-              </div>
             </div>
           </div>
         </div>
 
-        {/* Workspace Quick Hints Footer */}
+        {/* Footer */}
         <div className="pt-4 border-t border-slate-800 space-y-2 mt-auto">
           <div className="flex items-start space-x-2 text-[10px] text-slate-400 select-none">
             <Check className="w-3.5 h-3.5 text-emerald-500 mt-0.5 flex-shrink-0" />
             <p>Presets and styling persist automatic reloads via integrated local storage client-state.</p>
           </div>
           <div className="text-[9px] font-mono text-center text-slate-500">
-            YT Now Playing v1.1.2 • Active Sandbox
+            YT Now Playing v1.2.0
           </div>
         </div>
       </div>

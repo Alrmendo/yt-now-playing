@@ -3,55 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NowPlaying, ThemePreset } from "./types";
-
-export const MOCK_SONGS: NowPlaying[] = [
-  {
-    videoId: "jfKfPfyJRdk",
-    title: "lofi hip hop radio ✨ beats to relax/study to [chill beats session]",
-    channel: "Lofi Girl",
-    thumbnail: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=500&auto=format&fit=crop&q=80",
-    isPlaying: true,
-    currentTime: 1420,
-    duration: 7200, // 2 hours
-  },
-  {
-    videoId: "Resonance",
-    title: "HOME - Resonance (Synthwave Classic Music)",
-    channel: "Odysseus",
-    thumbnail: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=500&auto=format&fit=crop&q=80",
-    isPlaying: false,
-    currentTime: 42,
-    duration: 212,
-  },
-  {
-    videoId: "ChopinNocturne",
-    title: "Chopin - Nocturne in E-flat major, Op. 9, No. 2 (Solo Piano Recording)",
-    channel: "Paul Barton Studio",
-    thumbnail: "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=500&auto=format&fit=crop&q=80",
-    isPlaying: false,
-    currentTime: 0,
-    duration: 278,
-  },
-  {
-    videoId: "BlindingLights",
-    title: "The Weeknd - Blinding Lights (Official Retro-Vibe Audio)",
-    channel: "TheWeekndVEVO",
-    thumbnail: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=80",
-    isPlaying: false,
-    currentTime: 110,
-    duration: 202,
-  },
-  {
-    videoId: "RainforestRain",
-    title: "Gentle Rain on Greenhouse Glass Dome 🌧️ Deep Sleeping ASMR",
-    channel: "Rainforest Atmosphere",
-    thumbnail: "https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=500&auto=format&fit=crop&q=80",
-    isPlaying: false,
-    currentTime: 2450,
-    duration: 10800, // 3 hours
-  }
-];
+import { ThemePreset } from "./types";
 
 export const THEME_PRESETS: ThemePreset[] = [
   {
@@ -168,7 +120,7 @@ export function getThemeClasses(accent: string) {
         textMuted: "text-sky-200/60",
       };
     case "amber":
-      default:
+    default:
       return {
         text: "text-amber-400",
         bg: "bg-amber-500",
