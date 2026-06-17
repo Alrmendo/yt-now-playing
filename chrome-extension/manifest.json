@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "YT Now Playing",
+  "version": "0.4.0",
+  "description": "Sends YouTube now playing data to the desktop widget via WebSocket.",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["alarms", "tabs"]
+}

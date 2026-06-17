@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { Heart, Youtube } from "lucide-react";
+import { Heart, Youtube, Settings } from "lucide-react";
 import { NowPlaying, ThemePreset, WidgetSettings } from "../types";
 import { getThemeClasses, formatTime } from "../mockData";
 
@@ -12,9 +12,10 @@ interface FullCardPlayerProps {
   data: NowPlaying;
   theme: ThemePreset;
   settings: WidgetSettings;
+  onOpenSettings?: () => void;
 }
 
-export default function FullCardPlayer({ data, theme, settings }: FullCardPlayerProps) {
+export default function FullCardPlayer({ data, theme, settings, onOpenSettings }: FullCardPlayerProps) {
   const t = getThemeClasses(theme.accent);
   const [isLiked, setIsLiked] = React.useState(false);
 
@@ -23,20 +24,31 @@ export default function FullCardPlayer({ data, theme, settings }: FullCardPlayer
   return (
     <div
       id="widget-player-full"
-      className="relative w-[320px] p-5 bg-slate-900/95 backdrop-blur-xl rounded-3xl border border-slate-800 shadow-2xl overflow-hidden font-sans flex flex-col justify-between transition-all hover:border-slate-700 hover:shadow-2xl hover:scale-[1.01] duration-300"
+      className="drag relative w-[320px] p-5 bg-slate-900/95 backdrop-blur-xl rounded-3xl border border-slate-800 shadow-2xl overflow-hidden font-sans flex flex-col justify-between transition-all hover:border-slate-700 duration-300"
     >
       {/* Background radial atmosphere glow */}
       <div className={`absolute top-0 inset-x-0 h-40 bg-gradient-to-b ${theme.bgGradient} opacity-30 pointer-events-none`} />
 
-      {/* Status row */}
+      {/* Status row — gear lives here */}
       <div className="relative z-10 flex justify-between items-center text-[10px] tracking-wider uppercase font-mono text-slate-400 mb-4 px-1 select-none">
         <span className="flex items-center gap-1.5">
           <span className={`w-1.5 h-1.5 rounded-full ${data.isPlaying ? `${t.bg} animate-ping` : "bg-slate-600"}`} />
           {data.isPlaying ? "NOW PLAYING" : "PAUSED"}
         </span>
-        <div className="flex items-center space-x-1.5 bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-700/50">
-          <Youtube className="w-3 h-3 text-red-500" />
-          <span className="text-[9px]">YT WIDGET</span>
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center space-x-1.5 bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-700/50">
+            <Youtube className="w-3 h-3 text-red-500" />
+            <span className="text-[9px]">YT WIDGET</span>
+          </div>
+          {onOpenSettings && (
+            <button
+              onClick={onOpenSettings}
+              className="no-drag p-1 rounded-md text-slate-500 hover:text-slate-200 hover:bg-slate-700/60 transition-all"
+              title="Settings"
+            >
+              <Settings className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -69,7 +81,7 @@ export default function FullCardPlayer({ data, theme, settings }: FullCardPlayer
           <button
             id="full-like-btn"
             onClick={() => setIsLiked(!isLiked)}
-            className={`p-1.5 rounded-full transition-all ${isLiked ? "text-red-500 scale-110" : "text-slate-500 hover:text-slate-350 hover:bg-slate-800/40"}`}
+            className={`no-drag p-1.5 rounded-full transition-all flex-shrink-0 ${isLiked ? "text-red-500 scale-110" : "text-slate-500 hover:text-slate-350 hover:bg-slate-800/40"}`}
             aria-label="Like track"
           >
             <Heart className="w-4 h-4" fill={isLiked ? "currentColor" : "none"} />
@@ -81,10 +93,7 @@ export default function FullCardPlayer({ data, theme, settings }: FullCardPlayer
       {(settings.showProgress || settings.showTimeLabels) && (
         <div className="relative z-10 w-full px-0.5 space-y-1.5">
           {settings.showProgress && (
-            <div
-              id="full-progress-bar"
-              className="w-full h-1 bg-slate-800 rounded-lg overflow-hidden"
-            >
+            <div id="full-progress-bar" className="w-full h-1 bg-slate-800 rounded-lg overflow-hidden">
               <div
                 className={`h-full transition-all duration-300 ${t.bg}`}
                 style={{ width: `${progressPercent}%` }}

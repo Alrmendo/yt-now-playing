@@ -16,6 +16,10 @@
   50% { transform: translateY(-6px); }
 }
 
+/* Electron frameless window drag regions */
+.drag    { -webkit-app-region: drag;    app-region: drag;    }
+.no-drag { -webkit-app-region: no-drag; app-region: no-drag; }
+
 /* Custom styled scrollbars for smooth dashboard feel */
 ::-webkit-scrollbar {
   width: 6px;

@@ -4,23 +4,24 @@
  */
 
 import React from "react";
-import { Youtube, Radio } from "lucide-react";
+import { Youtube, Radio, Settings } from "lucide-react";
 import { LayoutPreset, ThemePreset } from "../types";
 import { getThemeClasses } from "../mockData";
 
 interface IdleStateProps {
   layout: LayoutPreset;
   theme: ThemePreset;
+  onOpenSettings?: () => void;
 }
 
-export default function IdleState({ layout, theme }: IdleStateProps) {
+export default function IdleState({ layout, theme, onOpenSettings }: IdleStateProps) {
   const t = getThemeClasses(theme.accent);
 
   if (layout === "slim") {
     return (
       <div
         id="widget-idle-slim"
-        className="w-full flex items-center px-4 py-3 bg-slate-900/90 backdrop-blur-md rounded-xl border border-slate-800 text-xs text-slate-300 font-sans shadow-lg transition-all"
+        className="w-full flex items-center justify-between px-4 py-3 bg-slate-900/90 backdrop-blur-md rounded-xl border border-slate-800 text-xs text-slate-300 font-sans shadow-lg"
       >
         <div className="flex items-center space-x-3 truncate">
           <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-800 border border-slate-700">
@@ -31,6 +32,15 @@ export default function IdleState({ layout, theme }: IdleStateProps) {
             <p className="text-[10px] text-slate-400">Waiting for YouTube media...</p>
           </div>
         </div>
+        {onOpenSettings && (
+          <button
+            onClick={onOpenSettings}
+            className="no-drag ml-3 p-1.5 rounded-md text-slate-600 hover:text-slate-300 hover:bg-slate-700/60 transition-all flex-shrink-0"
+            title="Settings"
+          >
+            <Settings className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
     );
   }
@@ -39,37 +49,55 @@ export default function IdleState({ layout, theme }: IdleStateProps) {
     return (
       <div
         id="widget-idle-compact"
-        className="w-[280px] p-4 bg-slate-900/90 backdrop-blur-xl rounded-2xl border border-slate-800/90 shadow-xl flex flex-col items-center justify-center text-center font-sans space-y-3 transition-all"
+        className="relative w-[280px] p-4 bg-slate-900/90 backdrop-blur-xl rounded-2xl border border-slate-800/90 shadow-xl flex flex-col items-center justify-center text-center font-sans space-y-3"
       >
+        {onOpenSettings && (
+          <button
+            onClick={onOpenSettings}
+            className="no-drag absolute top-2 right-2 p-1 rounded-md text-slate-600 hover:text-slate-300 hover:bg-slate-700/60 transition-all"
+            title="Settings"
+          >
+            <Settings className="w-3 h-3" />
+          </button>
+        )}
         <div className="relative group">
-          <div className={`absolute -inset-1 rounded-full opacity-35 blur-sm transition-all group-hover:opacity-50 ${t.bg}`} />
+          <div className={`absolute -inset-1 rounded-full opacity-35 blur-sm group-hover:opacity-50 ${t.bg}`} />
           <div className="relative flex items-center justify-center w-12 h-12 rounded-full bg-slate-800 border border-slate-700">
             <Youtube className="w-6 h-6 text-slate-400" />
           </div>
         </div>
         <div className="space-y-1">
           <h4 className="text-sm font-semibold text-slate-200">No YouTube Media</h4>
-          <p className="text-xs text-slate-400 leading-relaxed px-2">
-            Play a video to sync status
-          </p>
+          <p className="text-xs text-slate-400 leading-relaxed px-2">Play a video to sync status</p>
         </div>
       </div>
     );
   }
 
-  // Full Layout Idle State
+  // Full layout
   return (
     <div
       id="widget-idle-full"
-      className="w-[320px] p-5 bg-slate-900/95 backdrop-blur-xl rounded-3xl border border-slate-800 shadow-2xl flex flex-col items-center justify-between text-center font-sans h-[340px] transition-all"
+      className="w-[320px] p-5 bg-slate-900/95 backdrop-blur-xl rounded-3xl border border-slate-800 shadow-2xl flex flex-col items-center justify-between text-center font-sans h-[340px]"
     >
-      {/* Top Bar */}
+      {/* Top bar */}
       <div className="w-full flex justify-between items-center text-[10px] text-slate-500 tracking-wider uppercase font-mono px-1">
         <span className="flex items-center gap-1">
           <Radio className="w-3 h-3 text-slate-400" />
           Offline
         </span>
-        <span>YT widget</span>
+        <div className="flex items-center gap-2">
+          <span>YT widget</span>
+          {onOpenSettings && (
+            <button
+              onClick={onOpenSettings}
+              className="no-drag p-1 rounded-md text-slate-600 hover:text-slate-300 hover:bg-slate-700/60 transition-all"
+              title="Settings"
+            >
+              <Settings className="w-3 h-3" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Main content */}
