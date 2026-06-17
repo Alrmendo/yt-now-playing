@@ -58,32 +58,29 @@ export default function App() {
 
   const activeTheme = THEME_PRESETS.find((t) => t.id === settings.themeId) || THEME_PRESETS[0];
 
-  // Dynamic taskbar icon — only meaningful in the player window
+  // Manual window dragging — driven by the main process so it tracks the
+  // cursor 1:1 on scaled displays (native -webkit-app-region drag desyncs there).
   useEffect(() => {
-    if (!window.electronAPI?.setTaskbarIcon || isSettingsPage) return;
-    const canvas = document.createElement("canvas");
-    canvas.width = 32;
-    canvas.height = 32;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!window.electronAPI?.startDrag) return;
 
-    ctx.fillStyle = activeTheme.colorHex;
-    ctx.beginPath();
-    if (typeof ctx.roundRect === "function") ctx.roundRect(0, 0, 32, 32, 7);
-    else ctx.rect(0, 0, 32, 32);
-    ctx.fill();
+    const handleMouseDown = (e: MouseEvent) => {
+      if (e.button !== 0) return;
+      const target = e.target as HTMLElement;
+      if (target.closest(".no-drag")) return;
+      if (!target.closest(".drag")) return;
+      window.electronAPI?.startDrag();
+    };
+    const handleMouseUp = () => window.electronAPI?.stopDrag();
 
-    ctx.fillStyle = "white";
-    ctx.beginPath();
-    ctx.moveTo(10, 8);
-    ctx.lineTo(10, 24);
-    ctx.lineTo(25, 16);
-    ctx.closePath();
-    ctx.fill();
-
-    window.electronAPI.setTaskbarIcon(canvas.toDataURL("image/png"));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings.themeId]);
+    document.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("blur", handleMouseUp);
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("blur", handleMouseUp);
+    };
+  }, []);
 
   const updateSettings = (fields: Partial<WidgetSettings>) =>
     setSettings((prev) => ({ ...prev, ...fields }));

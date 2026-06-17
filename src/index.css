@@ -16,9 +16,10 @@
   50% { transform: translateY(-6px); }
 }
 
-/* Electron frameless window drag regions */
-.drag    { -webkit-app-region: drag;    app-region: drag;    }
-.no-drag { -webkit-app-region: no-drag; app-region: no-drag; }
+/* Electron frameless window drag regions — dragging itself is handled in JS
+   (App.tsx) via the main process so it isn't capped by DPI scaling; these
+   classes are just markers, not native -webkit-app-region drag. */
+.drag    { cursor: move; }
 
 /* Custom styled scrollbars for smooth dashboard feel */
 ::-webkit-scrollbar {

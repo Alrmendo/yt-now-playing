@@ -74,7 +74,7 @@ export default function FullCardPlayer({ data, theme, settings, onOpenSettings }
             >
               {data.title}
             </h3>
-            <p id="full-channel" className="text-xs text-slate-450 truncate mt-1 hover:text-slate-200 transition-colors">
+            <p id="full-channel" className="text-xs text-slate-400 truncate mt-1 hover:text-slate-200 transition-colors">
               {data.channel}
             </p>
           </div>

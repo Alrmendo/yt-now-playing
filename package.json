@@ -17,8 +17,8 @@
     "appId": "com.ytplaying.widget",
     "productName": "YT Now Playing",
     "directories": { "output": "release" },
-    "files": ["dist/**", "electron/**"],
-    "win": { "target": "portable" }
+    "files": ["dist/**", "electron/**", "assets/**"],
+    "win": { "target": "portable", "icon": "assets/icon.png" }
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

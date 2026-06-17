@@ -21,7 +21,7 @@ export default function IdleState({ layout, theme, onOpenSettings }: IdleStatePr
     return (
       <div
         id="widget-idle-slim"
-        className="w-full flex items-center justify-between px-4 py-3 bg-slate-900/90 backdrop-blur-md rounded-xl border border-slate-800 text-xs text-slate-300 font-sans shadow-lg"
+        className="drag w-full flex items-center justify-between px-4 py-3 bg-slate-900/90 backdrop-blur-md rounded-xl border border-slate-800 text-xs text-slate-300 font-sans shadow-lg"
       >
         <div className="flex items-center space-x-3 truncate">
           <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-800 border border-slate-700">
@@ -49,7 +49,7 @@ export default function IdleState({ layout, theme, onOpenSettings }: IdleStatePr
     return (
       <div
         id="widget-idle-compact"
-        className="relative w-[280px] p-4 bg-slate-900/90 backdrop-blur-xl rounded-2xl border border-slate-800/90 shadow-xl flex flex-col items-center justify-center text-center font-sans space-y-3"
+        className="drag relative w-[280px] p-4 bg-slate-900/90 backdrop-blur-xl rounded-2xl border border-slate-800/90 shadow-xl flex flex-col items-center justify-center text-center font-sans space-y-3"
       >
         {onOpenSettings && (
           <button
@@ -78,7 +78,7 @@ export default function IdleState({ layout, theme, onOpenSettings }: IdleStatePr
   return (
     <div
       id="widget-idle-full"
-      className="w-[320px] p-5 bg-slate-900/95 backdrop-blur-xl rounded-3xl border border-slate-800 shadow-2xl flex flex-col items-center justify-between text-center font-sans h-[340px]"
+      className="drag w-[320px] p-5 bg-slate-900/95 backdrop-blur-xl rounded-3xl border border-slate-800 shadow-2xl flex flex-col items-center justify-between text-center font-sans h-[340px]"
     >
       {/* Top bar */}
       <div className="w-full flex justify-between items-center text-[10px] text-slate-500 tracking-wider uppercase font-mono px-1">

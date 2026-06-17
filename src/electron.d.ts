@@ -5,7 +5,8 @@ declare global {
     electronAPI?: {
       openSettingsWindow(): void;
       closeWindow(): void;
-      setTaskbarIcon(dataURL: string): void;
+      startDrag(): void;
+      stopDrag(): void;
     };
   }
 }
