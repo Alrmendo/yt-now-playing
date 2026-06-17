@@ -1,0 +1,6 @@
+{
+  "name": "YT Now Playing",
+  "description": "A sleek YouTube playback status widget with multiple layout presets, custom-styled themes, and real-time playback simulation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
