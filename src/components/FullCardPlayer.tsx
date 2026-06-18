@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { Heart, Youtube, Settings } from "lucide-react";
+import { Heart, Youtube, Settings, Volume2, VolumeX } from "lucide-react";
 import { NowPlaying, ThemePreset, WidgetSettings } from "../types";
 import { getThemeClasses, formatTime } from "../mockData";
 
@@ -18,8 +18,40 @@ interface FullCardPlayerProps {
 export default function FullCardPlayer({ data, theme, settings, onOpenSettings }: FullCardPlayerProps) {
   const t = getThemeClasses(theme.accent);
   const [isLiked, setIsLiked] = React.useState(false);
+  const [volume, setVolume] = React.useState(0);
+  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  const lastVolumeRef = React.useRef(100);
 
   const progressPercent = data.duration > 0 ? (data.currentTime / data.duration) * 100 : 0;
+  const isMuted = volume === 0;
+
+  const postToPlayer = (func: string, args: unknown[] = []) => {
+    iframeRef.current?.contentWindow?.postMessage(JSON.stringify({ event: "command", func, args }), "*");
+  };
+
+  // Recomputed only when the video changes, so ticking currentTime doesn't reload the embed.
+  const embedSrc = React.useMemo(
+    () =>
+      `https://www.youtube.com/embed/${data.videoId}?enablejsapi=1&autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&playsinline=1&start=${Math.floor(data.currentTime)}`,
+    [data.videoId]
+  );
+
+  // Reset to muted whenever the embed (re)loads — matches the mute=1 it was built with.
+  React.useEffect(() => setVolume(0), [embedSrc]);
+
+  // Mirror play/pause state into the embed via postMessage instead of reloading it.
+  React.useEffect(() => {
+    postToPlayer(data.isPlaying ? "playVideo" : "pauseVideo");
+  }, [data.isPlaying]);
+
+  const handleVolumeChange = (next: number) => {
+    setVolume(next);
+    if (next > 0) lastVolumeRef.current = next;
+    postToPlayer(next === 0 ? "mute" : "unMute");
+    postToPlayer("setVolume", [next]);
+  };
+
+  const toggleMute = () => handleVolumeChange(isMuted ? lastVolumeRef.current : 0);
 
   return (
     <div
@@ -52,15 +84,41 @@ export default function FullCardPlayer({ data, theme, settings, onOpenSettings }
         </div>
       </div>
 
-      {/* Artwork */}
+      {/* Artwork — muted, controls-less video embed instead of a static thumbnail */}
       <div className="relative aspect-square w-full mb-4 rounded-2xl overflow-hidden shadow-[0_12px_24px_-10px_rgba(0,0,0,0.6)]">
-        <img
-          id="full-thumb"
-          src={data.thumbnail}
-          alt={data.title}
-          className={`w-full h-full object-cover transition-all duration-700 ${data.isPlaying ? "scale-105" : "scale-100 filter brightness-90"}`}
-          referrerPolicy="no-referrer"
+        <iframe
+          id="full-video"
+          ref={iframeRef}
+          src={embedSrc}
+          title={data.title}
+          className="w-full h-full pointer-events-none"
+          style={{ border: 0 }}
+          allow="autoplay; encrypted-media"
         />
+        <div className="no-drag group absolute bottom-2 right-2">
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 h-0 opacity-0 pointer-events-none group-hover:h-20 group-hover:opacity-100 group-hover:pointer-events-auto overflow-hidden transition-all duration-200 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-full w-7 py-2">
+            <input
+              id="full-volume-slider"
+              type="range"
+              min={0}
+              max={100}
+              value={volume}
+              onChange={(e) => handleVolumeChange(Number(e.target.value))}
+              style={{ WebkitAppearance: "slider-vertical", width: 4, height: 64 }}
+              className="accent-white cursor-pointer"
+              aria-label="Volume"
+            />
+          </div>
+          <button
+            id="full-mute-btn"
+            onClick={toggleMute}
+            className="relative p-1.5 rounded-full bg-black/60 backdrop-blur-sm text-slate-200 hover:text-white transition-all"
+            aria-label={isMuted ? "Unmute" : "Mute"}
+            title={isMuted ? "Unmute" : "Mute"}
+          >
+            {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+          </button>
+        </div>
       </div>
 
       {/* Track info */}

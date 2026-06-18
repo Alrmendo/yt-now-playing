@@ -32,6 +32,7 @@ function createMainWindow() {
       preload:          path.join(__dirname, 'preload.cjs'),
       contextIsolation: true,
       nodeIntegration:  false,
+      autoplayPolicy:   'no-user-gesture-required',
     },
   });
 
